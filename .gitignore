@@ -1,0 +1,5 @@
+.venv/
+.idea/
+trending.json
+summary.md
+__pycache__/
