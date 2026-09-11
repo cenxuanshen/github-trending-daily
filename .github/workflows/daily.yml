@@ -1,0 +1,35 @@
+name: GitHub Trending Daily
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests beautifulsoup4
+
+      - name: Fetch trending
+        run: python fetch_trending.py
+
+      - name: Summarize with AI
+        env:
+          ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
+        run: python summarize.py
+
+      - name: Upload result
+        uses: actions/upload-artifact@v4
+        with:
+          name: summary
+          path: summary.md

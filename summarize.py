@@ -2,7 +2,8 @@ import json
 import requests
 
 # ⚠️ 替换成你的智谱 API Key
-API_KEY = "78c8f06346204dee954f74d474d67d49.kGaAVm2sU9KbB1NA"
+import os
+API_KEY = os.environ.get("ZHIPU_API_KEY", "本地测试用的Key")
 API_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions"
 
 # 1. 读取抓取结果
