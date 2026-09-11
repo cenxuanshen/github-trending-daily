@@ -77,7 +77,8 @@ if mail_user and mail_pass and receiver:
     message["Subject"] = Header(f"GitHub Trending 每日总结 {fetch_time}", "utf-8")
 
     try:
-        smtp = smtplib.SMTP_SSL("smtp.qq.com", 465)
+        smtp = smtplib.SMTP("smtp.qq.com", 587)
+        smtp.starttls()
         smtp.login(mail_user, mail_pass)
         smtp.sendmail(mail_user, [receiver], message.as_string())
         smtp.quit()
