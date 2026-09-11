@@ -26,6 +26,9 @@ jobs:
       - name: Summarize with AI
         env:
           ZHIPU_API_KEY: ${{ secrets.ZHIPU_API_KEY }}
+          MAIL_USER: ${{ secrets.MAIL_USER }}
+          MAIL_PASS: ${{ secrets.MAIL_PASS }}
+          MAIL_TO: ${{ secrets.MAIL_TO }}
         run: python summarize.py
 
       - name: Upload result

@@ -58,3 +58,29 @@ with open("summary.md", "w", encoding="utf-8") as f:
 print("✅ 总结已保存到 summary.md")
 print("=" * 50)
 print(summary)
+
+
+
+import smtplib
+from email.mime.text import MIMEText
+from email.header import Header
+
+# 邮件推送
+mail_user = os.environ.get("MAIL_USER")
+mail_pass = os.environ.get("MAIL_PASS")
+receiver = os.environ.get("MAIL_TO")
+
+if mail_user and mail_pass and receiver:
+    message = MIMEText(summary, "plain", "utf-8")
+    message["From"] = Header(f"GitHub Trending <{mail_user}>")
+    message["To"] = Header(receiver)
+    message["Subject"] = Header(f"GitHub Trending 每日总结 {fetch_time}", "utf-8")
+
+    try:
+        smtp = smtplib.SMTP_SSL("smtp.qq.com", 465)
+        smtp.login(mail_user, mail_pass)
+        smtp.sendmail(mail_user, [receiver], message.as_string())
+        smtp.quit()
+        print("📧 邮件发送成功")
+    except Exception as e:
+        print(f"❌ 邮件发送失败: {e}")
