@@ -2,11 +2,27 @@ import requests
 from bs4 import BeautifulSoup
 import json
 from datetime import datetime
+import time
 
 url = "https://github.com/trending"
 headers = {"User-Agent": "Mozilla/5.0"}
 
-resp = requests.get(url, headers=headers, timeout=10)
+def fetch_with_retry(url, headers, max_retries=3):
+    """带重试的抓取函数"""
+    for attempt in range(max_retries):
+        try:
+            resp = requests.get(url, headers=headers, timeout=30)
+            resp.raise_for_status()
+            return resp
+        except Exception as e:
+            print(f"⚠️ 第 {attempt + 1} 次抓取失败: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(5)
+            else:
+                raise
+    return None
+
+resp = fetch_with_retry(url, headers)
 soup = BeautifulSoup(resp.text, "html.parser")
 
 # 抓取时间
